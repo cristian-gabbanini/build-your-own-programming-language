@@ -18,18 +18,18 @@ const getIdentifier = node => {
   return identifier;
 };
 
+const define = node => {
+  environment[node.identifier.name] = node.assignment.value;
+};
+
 const evaluate = node => {
-  if (node.type === 'CallExpression') {
-    return apply(node);
-  }
+  if (node.type === 'VariableDeclaration') return define(node);
 
-  if (node.type === 'Identifier') {
-    return getIdentifier(node);
-  }
+  if (node.type === 'CallExpression') return apply(node);
 
-  if (node.value) {
-    return node.value;
-  }
+  if (node.type === 'Identifier') return getIdentifier(node);
+
+  if (node.value) return node.value;
 };
 
 module.exports = { evaluate };
